@@ -2,8 +2,6 @@ use structopt::StructOpt;
 
 use super::super::gitlab_config;
 use super::{check_if_token_already_set, get_password, LoginOptions};
-use std::io::{stdin, Read};
-use std::result::Result::{Err, Ok};
 
 #[derive(Debug, StructOpt)]
 pub struct SamlLoginStrategy {

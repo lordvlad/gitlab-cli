@@ -30,7 +30,7 @@ impl Configure {
     }
 
     /// Sets the configuration property identified by 'key' to 'value'.
-    fn set_value(key: &ConfigureKeys, value: &String) {
+    fn set_value(key: &ConfigureKeys, value: &str) {
         let config_key = format!("gitlab.{}", key.to_string().to_lowercase());
         exit(
             Command::new("git")

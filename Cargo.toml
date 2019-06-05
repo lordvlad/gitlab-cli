@@ -1,15 +1,15 @@
 [package]
-name = "gitlab-remote"
+name = "gitlab"
 version = "0.1.0"
 authors = ["Waldemar Reusch <waldemar.reusch@googlemail.com>"]
 edition = "2018"
 
 [dependencies]
-structopt = "0.2.16"
+structopt = "0.2"
 clap = "2.21"
 toml = "0.5"
 serde = { version = "1.0", features = ["derive"] }
 dirs = "2.0.1"
 rust-ini = "0.13"
-whoami = "0.5.2"
-dialoguer = "0.4.0"
+whoami = "0.5"
+dialoguer = "0.4"

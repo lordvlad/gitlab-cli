@@ -13,7 +13,7 @@ pub struct GitClone {
     args: Vec<OsString>,
 }
 impl GitClone {
-    pub fn clone(&self) {
+    pub fn git_clone(&self) {
         unimplemented!();
     }
 }

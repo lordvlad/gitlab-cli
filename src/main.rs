@@ -1,6 +1,7 @@
 use structopt::StructOpt;
 
 mod clone;
+mod completion;
 mod configure;
 mod gitlab_config;
 mod login;
@@ -34,7 +35,7 @@ enum Cmd {
 
     /// Print completion function for bash to stdout.
     #[structopt(name = "completion")]
-    Completion,
+    Completion(completion::Completion),
 
     /// Clone a project from gitlab, essentially doing `git clone` but with a couple of
     /// extra features.
@@ -65,17 +66,14 @@ fn main() {
         Cmd::Configure(opt) => opt.configure(),
         Cmd::Publish(opt) => opt.publish(),
         Cmd::Status(opt) => opt.status(),
-        Cmd::GitClone(opt) => opt.clone(),
+        Cmd::GitClone(opt) => opt.git_clone(),
         Cmd::Login(opt) => opt.login(),
-        Cmd::Completion => completion(),
+        Cmd::Completion(opt) => opt.completion(),
         Cmd::Init => init(),
         Cmd::Update => update(),
     }
 }
 
-fn completion() {
-    unimplemented!();
-}
 fn init() {
     unimplemented!();
 }
