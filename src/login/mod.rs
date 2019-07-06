@@ -1,5 +1,5 @@
+use std::error::Error;
 use std::io::{stdin, Read};
-use std::result::Result::{Err, Ok};
 
 use dialoguer::PasswordInput;
 use structopt::StructOpt;
@@ -16,7 +16,7 @@ pub struct Login {
 
 impl Login {
     /// Logs the user in using the strategy configured in 'opt.strategy'.
-    pub fn login(&self) {
+    pub fn login(&self) -> Result<(), Box<Error>> {
         match &self.strategy {
             LoginStrategies::Saml(opt) => opt.login(),
         }
@@ -65,21 +65,20 @@ fn check_if_token_already_set(gitlab_config: &gitlab_config::GitlabConfig) {
     }
 }
 
-fn get_password(opts: &LoginOptions) -> String {
+fn get_password(opts: &LoginOptions) -> Result<String, Box<Error>> {
     if opts.password.is_some() {
-        opts.password.as_ref().unwrap().clone()
+        Ok(opts.password.as_ref().unwrap().clone())
     } else if opts.password_stdin {
         let mut password: String = "".to_string();
         match stdin().read_to_string(&mut password) {
-            Ok(_) => password,
-            Err(e) => panic!(format!("Failed to read password from stdin {:?}", e)),
+            Ok(_) => Ok(password),
+            Err(e) => Err(e.into()), // (format!("Failed to read password from stdin {:?}", e)),
         }
     } else {
-        PasswordInput::new()
+        Ok(PasswordInput::new()
             .with_prompt("Your password")
             .interact()
-            .ok()
             .unwrap()
-            .clone()
+            .clone())
     }
 }

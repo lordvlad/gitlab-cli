@@ -1,3 +1,4 @@
+use std::error::Error;
 use structopt::StructOpt;
 
 #[derive(Debug, StructOpt)]
@@ -9,7 +10,7 @@ pub struct Status {
 }
 
 impl Status {
-    pub fn status(&self) {
+    pub fn status(&self) -> Result<(), Box<Error>> {
         unimplemented!();
     }
 }

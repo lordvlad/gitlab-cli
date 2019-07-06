@@ -1,3 +1,4 @@
+use std::error::Error;
 use std::process::{exit, Command};
 use std::result::Result::{Err, Ok};
 
@@ -22,7 +23,7 @@ pub struct Configure {
 }
 
 impl Configure {
-    pub fn configure(&self) {
+    pub fn configure(&self) -> Result<(), Box<Error>> {
         match &self.value {
             Some(val) => Configure::set_value(&self.key, &val),
             None => Configure::print_value(&self.key),
@@ -30,24 +31,20 @@ impl Configure {
     }
 
     /// Sets the configuration property identified by 'key' to 'value'.
-    fn set_value(key: &ConfigureKeys, value: &str) {
+    fn set_value(key: &ConfigureKeys, value: &str) -> Result<(), Box<Error>> {
         let config_key = format!("gitlab.{}", key.to_string().to_lowercase());
-        exit(
-            Command::new("git")
-                .arg("config")
-                .arg("--global")
-                .arg(config_key)
-                .arg(value)
-                .status()
-                .unwrap()
-                .code()
-                .unwrap(),
-        );
+        Command::new("git")
+            .arg("config")
+            .arg("--global")
+            .arg(config_key)
+            .arg(value)
+            .status()?;
+        Ok(())
     }
 
     /// Prints the configuration property identified by 'key'.
-    fn print_value(key: &ConfigureKeys) {
-        let gitlab_config = gitlab_config::GitlabConfig::from_file();
+    fn print_value(key: &ConfigureKeys) -> Result<(), Box<Error>> {
+        let gitlab_config = gitlab_config::GitlabConfig::from_file()?;
         match key {
             ConfigureKeys::User => println!("{}", gitlab_config.user),
             ConfigureKeys::Host => println!("{}", gitlab_config.host),
@@ -56,6 +53,8 @@ impl Configure {
             ConfigureKeys::Reset => Configure::reset(),
             ConfigureKeys::List => println!("{}", gitlab_config),
         }
+
+        Ok(())
     }
 
     /// Resets the gitlab configuration, i.e. removes the whole 'gitlab' section

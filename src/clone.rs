@@ -1,3 +1,4 @@
+use std::error::Error;
 use std::ffi::OsString;
 
 use structopt::StructOpt;
@@ -13,7 +14,7 @@ pub struct GitClone {
     args: Vec<OsString>,
 }
 impl GitClone {
-    pub fn git_clone(&self) {
+    pub fn git_clone(&self) -> Result<(), Box<Error>> {
         unimplemented!();
     }
 }

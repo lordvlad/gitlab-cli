@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::error::Error;
 use std::fmt;
 
 use dirs::home_dir;
@@ -32,7 +33,7 @@ impl GitlabConfig {
         return format!("ssh://git@{}:{}/", self.host, self.sshport);
     }
 
-    pub fn from_file() -> GitlabConfig {
+    pub fn from_file() -> Result<GitlabConfig, Box<Error>> {
         let empty_config: HashMap<String, String> = HashMap::new();
         let git_config_path = format!("{}/.gitconfig", home_dir().unwrap().display());
         let git_config = Ini::load_from_file(&git_config_path).unwrap();
@@ -40,7 +41,7 @@ impl GitlabConfig {
             .section(Some("gitlab".to_owned()))
             .unwrap_or(&empty_config);
 
-        GitlabConfig {
+        Ok(GitlabConfig {
             host: props.get("host").unwrap_or(&"".to_owned()).to_owned(),
             sshport: props
                 .get("sshport")
@@ -53,6 +54,6 @@ impl GitlabConfig {
                 .unwrap_or(&username().to_owned())
                 .to_owned(),
             token: props.get("token").unwrap_or(&"".to_owned()).to_owned(),
-        }
+        })
     }
 }

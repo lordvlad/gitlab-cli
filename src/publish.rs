@@ -1,3 +1,4 @@
+use std::error::Error;
 use structopt::StructOpt;
 
 #[derive(Debug, StructOpt)]
@@ -12,7 +13,7 @@ pub struct Publish {
     message: Option<String>,
 }
 impl Publish {
-    pub fn publish(&self) {
+    pub fn publish(&self) -> Result<(), Box<Error>> {
         unimplemented!();
     }
 }
