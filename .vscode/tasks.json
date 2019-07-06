@@ -4,12 +4,25 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "run",
+            "label": "build release",
             "type": "shell",
-            "command": "cargo run",
+            "command": "cargo build --release",
             "problemMatcher": [
                 "$rustc"
             ]
+        },
+        {
+            "label": "lint all sources",
+            "type": "shell",
+            "command": "cargo clippy",
+            "problemMatcher": [
+                "$rustc"
+            ]
+        },
+        {
+            "label": "format all sources",
+            "type": "shell",
+            "command": "rustfmt **/*.rs"
         }
     ]
 }
