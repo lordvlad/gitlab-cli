@@ -1,7 +1,14 @@
 language: rust
 rust:
-  - stable
-  - nightly
+- stable
+- nightly
 matrix:
   fast_finish: true
 cache: cargo
+deploy:
+  provider: releases
+  api_key:
+    secure: CplpDtBLnfkByh06LM8X7VyJhSlbp5AdVIip8WKcXyaym4+xX8s+CWk0faZcjno2OKc0qpSJClJjF+5dfG6A7u5ESATrzWP1NRh8d3ydT0wtqD4nxrNXsUAtw5NRhAg3ZM/BRgJ+LReX2x+ouYu68Se+a66MGns7/MI1Qc8M5tP0CAK7JGALAGnYArXH35msSppExaKZElPCrK/ormjfxwnGCOE5Jhjl2UAC/dST9kW9v+JGCBK60wJ9ef9v56vGMzx01Lx7HptOpKppo6gqc7j5b52X4Kc6R0CpeDfI3cdqd7bUeYe4uCKt2J7FLjMNGl4j/Qxz+XXYyK9a2Y+rb+tm4ryO1GZ8n6GdomSljhoX686mbz0UlU1t6fqHTc07oUVhMQzn6FbCS0U2lvXnSAUvgWmJ36KCbZBoGwm7TpW3wwiAk+6qZRXvUzDl3wqacR557ln6Gi/ve/hY0JexeW+/fXrsI0F0YPzhIAhpRtFzajQPeUC0ZihrXBRLdKaKDH41WJshLtRczbIQb+cdifYF57X+G+gEUYvYDs40itBmg84TJej2JFHVkWGcYwUyqpk4dIvkIINVqTAjs7ip2rtrM6wLeglm5NQfAMg5PhoB9gdovMLo7XG2n5rbtWfBr97Tlis8HxK7bNUF59yVdUVgvrtwvqzu0SXZXFTpv04=
+  file: target/release/gitlab
+  on:
+    repo: lordvlad/gitlab-cli
