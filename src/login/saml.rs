@@ -1,4 +1,3 @@
-use indoc::indoc;
 use std::error::Error;
 use std::time::Duration;
 
@@ -35,9 +34,7 @@ impl SamlLoginStrategy {
 
         let mut response = client.get(&self.idp_url).send()?;
 
-        assert!(response.status().is_success(), indoc!("
-            Failed to load the identity provider url {}. Please double check the idp-url option and try again."), self.idp_url
-        );
+        assert!(response.status().is_success(), "Failed to load the identity provider url {}. Please double check the idp-url option and try again.", self.idp_url);
 
         let mut fragment = Html::parse_document(&response.text().unwrap());
 
@@ -60,10 +57,7 @@ impl SamlLoginStrategy {
             .send()
             .unwrap();
 
-        assert!(response.status().is_success(), indoc(
-            "Failed to log in with username {} and password {}, server returned status code {}."
-            ),
-            user, password, response.status() );
+        assert!(response.status().is_success(), "Failed to log in with username {} and password {}, server returned status code {}.", user, password, response.status());
 
         Ok(())
     }
