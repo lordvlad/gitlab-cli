@@ -1,1 +1,2 @@
-# gitlab-cli
+# gitlab-cli 🍴
+
