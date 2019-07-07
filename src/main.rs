@@ -1,3 +1,5 @@
+use std::cell::RefCell;
+use std::error::Error;
 use structopt::StructOpt;
 
 mod clone;
@@ -7,6 +9,47 @@ mod gitlab_config;
 mod login;
 mod publish;
 mod status;
+
+thread_local!(pub static DEBUG: RefCell<bool> = RefCell::new(false));
+thread_local!(pub static FORMAT: RefCell<Option<String>> = RefCell::new(None));
+
+fn is_debug() -> bool {
+    DEBUG.with(|debug| debug.borrow().clone())
+}
+
+fn get_format() -> Option<String> {
+    FORMAT.with(|format| format.borrow().clone())
+}
+
+// #[macro_export]
+// macro_rules! gl_assert {
+//     ($guard:expr, $($arg:tt)*) => ({
+//         if !($guard as bool) {
+//             // crate::fail!($($arg)*)
+//             eprintln!("[ERROR] {}", format!($($arg)*));
+//             std::process::exit(1);
+//         }
+//     });
+// }
+
+// #[macro_export]
+// macro_rules! fail_hard {
+//     ($($arg:tt)*) => ({
+//         eprintln!("[ERROR] {}", format!($($arg)*));
+//         std::process::exit(1);
+//     });
+// }
+
+#[macro_export]
+macro_rules! debug {
+    ($($arg:tt)*) => ({
+        crate::DEBUG.with(|debug| {
+            if debug.borrow().clone() {
+                eprintln!("[DEBUG] {}", format!($($arg)*))
+            }
+        })
+    })
+}
 
 #[derive(Debug, StructOpt)]
 struct GitlabCli {
@@ -59,8 +102,15 @@ enum Cmd {
     Login(login::Login),
 }
 
-fn main() {
+fn main() -> Result<(), Box<Error>> {
     let args = GitlabCli::from_args();
+
+    DEBUG.with(|debug| {
+        debug.replace(args.debug);
+    });
+    FORMAT.with(|format| {
+        format.replace(args.format.clone());
+    });
 
     match args.cmd {
         Cmd::Configure(opt) => opt.configure(),
@@ -74,9 +124,9 @@ fn main() {
     }
 }
 
-fn init() {
+fn init() -> Result<(), Box<Error>> {
     unimplemented!();
 }
-fn update() {
+fn update() -> Result<(), Box<Error>> {
     unimplemented!();
 }

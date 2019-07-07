@@ -1,3 +1,4 @@
+use std::error::Error;
 use std::io::stdout;
 use structopt::StructOpt;
 
@@ -9,7 +10,8 @@ pub struct Completion {
     pub shell: String,
 }
 impl Completion {
-    pub fn completion(&self) {
-        GitlabCli::clap().gen_completions_to("gitlab", self.shell.parse().unwrap(), &mut stdout())
+    pub fn completion(&self) -> Result<(), Box<Error>> {
+        GitlabCli::clap().gen_completions_to("gitlab", self.shell.parse().unwrap(), &mut stdout());
+        Ok(())
     }
 }
