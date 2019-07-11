@@ -14,7 +14,7 @@ pub struct GitClone {
     args: Vec<OsString>,
 }
 impl GitClone {
-    pub fn git_clone(&self) -> Result<(), Box<Error>> {
+    pub fn git_clone(&self) -> Result<(), Box<dyn Error>> {
         unimplemented!();
     }
 }

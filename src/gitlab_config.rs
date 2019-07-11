@@ -33,7 +33,7 @@ impl GitlabConfig {
         return format!("ssh://git@{}:{}/", self.host, self.sshport);
     }
 
-    pub fn from_file() -> Result<GitlabConfig, Box<Error>> {
+    pub fn from_file() -> Result<GitlabConfig, Box<dyn Error>> {
         let empty_config: HashMap<String, String> = HashMap::new();
         let git_config_path = format!("{}/.gitconfig", home_dir().unwrap().display());
         let git_config = Ini::load_from_file(&git_config_path).unwrap();

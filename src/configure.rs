@@ -23,7 +23,7 @@ pub struct Configure {
 }
 
 impl Configure {
-    pub fn configure(&self) -> Result<(), Box<Error>> {
+    pub fn configure(&self) -> Result<(), Box<dyn Error>> {
         match &self.value {
             Some(val) => Configure::set_value(&self.key, &val),
             None => Configure::print_value(&self.key),
@@ -31,7 +31,7 @@ impl Configure {
     }
 
     /// Sets the configuration property identified by 'key' to 'value'.
-    fn set_value(key: &ConfigureKeys, value: &str) -> Result<(), Box<Error>> {
+    pub  fn set_value(key: &ConfigureKeys, value: &str) -> Result<(), Box<dyn Error>> {
         let config_key = format!("gitlab.{}", key.to_string().to_lowercase());
         Command::new("git")
             .arg("config")
@@ -43,7 +43,7 @@ impl Configure {
     }
 
     /// Prints the configuration property identified by 'key'.
-    fn print_value(key: &ConfigureKeys) -> Result<(), Box<Error>> {
+    fn print_value(key: &ConfigureKeys) -> Result<(), Box<dyn Error>> {
         let gitlab_config = gitlab_config::GitlabConfig::from_file()?;
         match key {
             ConfigureKeys::User => println!("{}", gitlab_config.user),

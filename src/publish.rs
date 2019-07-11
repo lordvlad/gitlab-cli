@@ -13,7 +13,7 @@ pub struct Publish {
     message: Option<String>,
 }
 impl Publish {
-    pub fn publish(&self) -> Result<(), Box<Error>> {
+    pub fn publish(&self) -> Result<(), Box<dyn Error>> {
         unimplemented!();
     }
 }

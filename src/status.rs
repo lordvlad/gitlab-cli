@@ -10,7 +10,7 @@ pub struct Status {
 }
 
 impl Status {
-    pub fn status(&self) -> Result<(), Box<Error>> {
+    pub fn status(&self) -> Result<(), Box<dyn Error>> {
         unimplemented!();
     }
 }

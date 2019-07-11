@@ -10,7 +10,7 @@ pub struct Completion {
     pub shell: String,
 }
 impl Completion {
-    pub fn completion(&self) -> Result<(), Box<Error>> {
+    pub fn completion(&self) -> Result<(), Box<dyn Error>> {
         GitlabCli::clap().gen_completions_to("gitlab", self.shell.parse().unwrap(), &mut stdout());
         Ok(())
     }
