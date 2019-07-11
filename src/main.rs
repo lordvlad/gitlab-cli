@@ -13,32 +13,9 @@ mod status;
 thread_local!(pub static DEBUG: RefCell<bool> = RefCell::new(false));
 thread_local!(pub static FORMAT: RefCell<Option<String>> = RefCell::new(None));
 
-fn is_debug() -> bool {
-    DEBUG.with(|debug| debug.borrow().clone())
-}
-
 fn get_format() -> Option<String> {
     FORMAT.with(|format| format.borrow().clone())
 }
-
-// #[macro_export]
-// macro_rules! gl_assert {
-//     ($guard:expr, $($arg:tt)*) => ({
-//         if !($guard as bool) {
-//             // crate::fail!($($arg)*)
-//             eprintln!("[ERROR] {}", format!($($arg)*));
-//             std::process::exit(1);
-//         }
-//     });
-// }
-
-// #[macro_export]
-// macro_rules! fail_hard {
-//     ($($arg:tt)*) => ({
-//         eprintln!("[ERROR] {}", format!($($arg)*));
-//         std::process::exit(1);
-//     });
-// }
 
 #[macro_export]
 macro_rules! debug {
@@ -49,6 +26,15 @@ macro_rules! debug {
             }
         })
     })
+}
+
+#[macro_export]
+macro_rules! fail {
+    ($($arg:tt)*) => ({
+        eprintln!("[FAIL] {}", format!($($arg)*));
+        std::process::exit(1);
+    })
+
 }
 
 #[derive(Debug, StructOpt)]
@@ -102,7 +88,7 @@ enum Cmd {
     Login(login::Login),
 }
 
-fn main() -> Result<(), Box<Error>> {
+fn main() -> Result<(), Box<dyn Error>> {
     let args = GitlabCli::from_args();
 
     DEBUG.with(|debug| {
@@ -124,9 +110,9 @@ fn main() -> Result<(), Box<Error>> {
     }
 }
 
-fn init() -> Result<(), Box<Error>> {
+fn init() -> Result<(), Box<dyn Error>> {
     unimplemented!();
 }
-fn update() -> Result<(), Box<Error>> {
+fn update() -> Result<(), Box<dyn Error>> {
     unimplemented!();
 }

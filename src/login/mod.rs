@@ -4,7 +4,7 @@ use std::io::{stdin, Read};
 use dialoguer::PasswordInput;
 use structopt::StructOpt;
 
-use super::gitlab_config;
+use super::{gitlab_config, fail};
 
 mod saml;
 
@@ -16,7 +16,7 @@ pub struct Login {
 
 impl Login {
     /// Logs the user in using the strategy configured in 'opt.strategy'.
-    pub fn login(&self) -> Result<(), Box<Error>> {
+    pub fn login(&self) -> Result<(), Box<dyn Error>> {
         match &self.strategy {
             LoginStrategies::Saml(opt) => opt.login(),
         }
@@ -61,11 +61,11 @@ struct LoginOptions {
 
 fn check_if_token_already_set(gitlab_config: &gitlab_config::GitlabConfig) {
     if !gitlab_config.token.is_empty() {
-        panic!("There is already a token configured, refusing to running login. If you really want a new login token, use the --force flag.")
+        fail!("There is already a token configured, refusing to running login. If you really want a new login token, use the --force flag.")
     }
 }
 
-fn get_password(opts: &LoginOptions) -> Result<String, Box<Error>> {
+fn get_password(opts: &LoginOptions) -> Result<String, Box<dyn Error>> {
     if opts.password.is_some() {
         Ok(opts.password.as_ref().unwrap().clone())
     } else if opts.password_stdin {
